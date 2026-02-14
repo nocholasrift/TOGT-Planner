@@ -1,0 +1,8 @@
+
+planningInit: "init/crazyflie_planning.yaml"
+lbfgsInit:     "init/crazyflie_lbfgs.yaml"
+
+planningRefine: "refine/crazyflie_planning.yaml"
+lbfgsRefine:     "refine/crazyflie_lbfgs.yaml"
+
+quadrotor: "crazyflie_quad.yaml"

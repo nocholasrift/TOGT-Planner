@@ -7,18 +7,36 @@ option(
   OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Eigen3 3.3.4 REQUIRED)
+# find_package(Eigen3 3.3.4 REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 include(FetchContent)
 
-FetchContent_Declare(
-  RapidJSON
-  GIT_REPOSITORY "https://github.com/Tencent/rapidjson.git"
-  GIT_TAG "master"
-  GIT_SHALLOW "TRUE"
-  SYSTEM FIND_PACKAGE_ARGS "NAMES;RapidJSON;CONFIG;1.1.0")
 
-FetchContent_MakeAvailable(RapidJSON)
+set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "" FORCE)
+set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+  rapidjson
+  GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+  GIT_TAG master
+  GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(rapidjson)
+# FetchContent_Declare(
+#   RapidJSON
+#   GIT_REPOSITORY "https://github.com/Tencent/rapidjson.git"
+#   GIT_TAG "master"
+#   GIT_SHALLOW "TRUE"
+#   SYSTEM FIND_PACKAGE_ARGS "NAMES;RapidJSON;CONFIG;1.1.0")
+
+# FetchContent_MakeAvailable(RapidJSON)
+
+FetchContent_GetProperties(rapidjson)
+
+
 add_definitions(-DEIGEN_STACK_ALLOCATION_LIMIT=1048576)
 
 add_library(${PROJECT_NAME})
@@ -115,7 +133,25 @@ endif(TOGT_FORCE_SCALAR_FIRST_QUATERNION)
 target_link_libraries(
   ${PROJECT_NAME}
   PUBLIC Eigen3::Eigen
-  PRIVATE "$<COMPILE_ONLY:rapidjson>")
+  # PRIVATE rapidjson
+)
+target_include_directories(${PROJECT_NAME}
+  PRIVATE ${rapidjson_SOURCE_DIR}/include
+)
+# target_link_libraries(
+#   ${PROJECT_NAME}
+#   PUBLIC Eigen3::Eigen
+#   PRIVATE "$<COMPILE_ONLY:rapidjson>")
+
+add_executable(build_trajectory
+  src/build_trajectory_from_gates.cpp
+)
+target_link_libraries(build_trajectory
+  ${PROJECT_NAME}
+)
+target_compile_definitions(build_trajectory
+  PRIVATE PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
+)
 
 include(CTest)
 if(BUILD_TESTING)

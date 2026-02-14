@@ -1,52 +1,33 @@
 #include "drolib/system/minco_snap_trajectory.hpp"
 #include "drolib/type/set_point.hpp"
-#include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"
 #include "rapidjson/filewritestream.h"
+#include "rapidjson/rapidjson.h"
 #include "rapidjson/writer.h"
 
 namespace drolib {
 
-MincoSnapTrajectory::MincoSnapTrajectory(const std::string quad_name, 
-                    const QuadManifold& quad,
-                    const TrajData& data,
-                    const double start_yaw, const double end_yaw,
-                    const std::string& name,
-                    const RotationType rtype,
-                    const HeadingType htype)
-    : name(name),
-      quad_name(quad_name),
-      quad(quad),
-      polys(data.traj),
-      start_pvaj(polys.getPVAJ(0.0)),
-      end_pvaj(polys.getPVAJ(data.T.sum())),
-      waypoints(data.P),
-      durations(data.T),
-      start_yaw(start_yaw),
-      end_yaw(end_yaw),
-      rotation_type(rtype),
-      heading_type(htype) {}
+MincoSnapTrajectory::MincoSnapTrajectory(
+    const std::string quad_name, const QuadManifold &quad, const TrajData &data,
+    const double start_yaw, const double end_yaw, const std::string &name,
+    const RotationType rtype, const HeadingType htype)
+    : name(name), quad_name(quad_name), quad(quad), polys(data.traj),
+      start_pvaj(polys.getPVAJ(0.0)), end_pvaj(polys.getPVAJ(data.T.sum())),
+      waypoints(data.P), durations(data.T), start_yaw(start_yaw),
+      end_yaw(end_yaw), rotation_type(rtype), heading_type(htype) {}
 
-MincoSnapTrajectory::MincoSnapTrajectory(const std::string quad_name, 
-                    const QuadManifold& quad,
-                    const TrajData& data,
-                    const double start_yaw,
-                    const std::string& name)
-    : name(name),
-      quad_name(quad_name),
-      quad(quad),
-      polys(data.traj),
-      start_pvaj(polys.getPVAJ(0.0)),
-      end_pvaj(polys.getPVAJ(data.T.sum())),
-      waypoints(data.P),
-      durations(data.T),
-      start_yaw(start_yaw),
-      end_yaw(start_yaw),
-      rotation_type(RotationType::TILT_HEADING),
+MincoSnapTrajectory::MincoSnapTrajectory(const std::string quad_name,
+                                         const QuadManifold &quad,
+                                         const TrajData &data,
+                                         const double start_yaw,
+                                         const std::string &name)
+    : name(name), quad_name(quad_name), quad(quad), polys(data.traj),
+      start_pvaj(polys.getPVAJ(0.0)), end_pvaj(polys.getPVAJ(data.T.sum())),
+      waypoints(data.P), durations(data.T), start_yaw(start_yaw),
+      end_yaw(start_yaw), rotation_type(RotationType::TILT_HEADING),
       heading_type(HeadingType::FORWARD_HEADING) {}
 
-TrajExtremum MincoSnapTrajectory::getSetpointVec(
-    const double sampleTimeSec) {
+TrajExtremum MincoSnapTrajectory::getSetpointVec(const double sampleTimeSec) {
   TrajExtremum extremum;
   if (!quad.valid()) {
     return extremum;
@@ -67,10 +48,10 @@ TrajExtremum MincoSnapTrajectory::getSetpointVec(
   Eigen::Quaterniond lastTilt{1, 0, 0, 0};
 
   extremum.vel.add(0.0);
-  extremum.vel.add(0.0);
   extremum.vel.add(polys.getMaxVel());
-  extremum.acc.add(polys.getMaxAcc());
 
+  extremum.acc.add(0.0);
+  extremum.acc.add(polys.getMaxAcc());
 
   double t{0.0};
   double dt{0.0};
@@ -85,9 +66,10 @@ TrajExtremum MincoSnapTrajectory::getSetpointVec(
     length += (pos - last_pos).norm();
     last_pos = pos;
 
-    //TODO: only support CONSTANT_HEADING and FORWARD_HEADING right now
+    // TODO: only support CONSTANT_HEADING and FORWARD_HEADING right now
     if (heading_type == HeadingType::FORWARD_HEADING) {
-      yaw << getHeading(pvajs.col(2), pvajs.col(1), lastTilt, lastHeading), 0.0, 0.0;
+      yaw << getHeading(pvajs.col(2), pvajs.col(1), lastTilt, lastHeading), 0.0,
+          0.0;
     } else {
       yaw << start_yaw, 0.0, 0.0;
     }
@@ -109,7 +91,6 @@ TrajExtremum MincoSnapTrajectory::getSetpointVec(
     dt = std::min(T - t, sampleTimeSec);
     t += dt;
   }
-
 
   extremum.length = length;
 
@@ -134,7 +115,7 @@ bool MincoSnapTrajectory::saveAllWaypoints(const std::string &filename) {
   std::vector<double> timestamps;
 
   timestamps.push_back(0.0);
-  for (size_t i=0; i < size_t(durations.size()); ++i) {
+  for (size_t i = 0; i < size_t(durations.size()); ++i) {
     timestamps.push_back(timestamps.back() + durations[i]);
   }
 
@@ -151,21 +132,18 @@ bool MincoSnapTrajectory::saveAllWaypoints(const std::string &filename) {
     }
   }
   file << "]\n\n";
-  
+
   file << "waypoints: [";
   for (size_t i{0}; i < size_t(points.cols()); ++i) {
     if (i < size_t(points.cols() - 1)) {
-      file << "[" << points.col(i).x() << ", "
-                  << points.col(i).y() << ", " 
-                  << points.col(i).z() << "],\n            ";
+      file << "[" << points.col(i).x() << ", " << points.col(i).y() << ", "
+           << points.col(i).z() << "],\n            ";
     } else {
-      file << "[" << points.col(i).x() << ", "
-                  << points.col(i).y() << ", " 
-                  << points.col(i).z() << "]";
+      file << "[" << points.col(i).x() << ", " << points.col(i).y() << ", "
+           << points.col(i).z() << "]";
     }
   }
   file << "]\n\n";
-
 
   file.precision();
   file.close();
@@ -173,8 +151,8 @@ bool MincoSnapTrajectory::saveAllWaypoints(const std::string &filename) {
   return true;
 }
 
-
-bool MincoSnapTrajectory::saveSegments(const std::string &filename, const int piecesPerSegment) {
+bool MincoSnapTrajectory::saveSegments(const std::string &filename,
+                                       const int piecesPerSegment) {
   if (!polys.valid()) {
     return false;
   }
@@ -209,7 +187,7 @@ bool MincoSnapTrajectory::saveSegments(const std::string &filename, const int pi
   std::vector<double> timestamps;
 
   timestamps.push_back(0.0);
-  for (size_t i=0; i < size_t(raceDurations.size()); ++i) {
+  for (size_t i = 0; i < size_t(raceDurations.size()); ++i) {
     timestamps.push_back(timestamps.back() + raceDurations[i]);
   }
 
@@ -222,12 +200,12 @@ bool MincoSnapTrajectory::saveSegments(const std::string &filename, const int pi
   for (size_t i{0}; i < size_t(raceWaypoints.cols()); ++i) {
     if (i < size_t(raceWaypoints.cols() - 1)) {
       file << "[" << raceWaypoints.col(i).x() << ", "
-                  << raceWaypoints.col(i).y() << ", " 
-                  << raceWaypoints.col(i).z() << "],\n            ";
+           << raceWaypoints.col(i).y() << ", " << raceWaypoints.col(i).z()
+           << "],\n            ";
     } else {
       file << "[" << raceWaypoints.col(i).x() << ", "
-                  << raceWaypoints.col(i).y() << ", " 
-                  << raceWaypoints.col(i).z() << "]";
+           << raceWaypoints.col(i).y() << ", " << raceWaypoints.col(i).z()
+           << "]";
     }
   }
   file << "]\n\n";
@@ -260,8 +238,8 @@ bool MincoSnapTrajectory::saveSegments(const std::string &filename, const int pi
 
 namespace details {
 
-void writeCSV(const std::filesystem::path& filename,
-              const SetpointVector& setpoints) {
+void writeCSV(const std::filesystem::path &filename,
+              const SetpointVector &setpoints) {
   std::ofstream file;
   file.open(filename.c_str());
   file << "t,p_x,p_y,p_z,q_w,q_x,q_y,q_z,v_x,v_y,v_z,w_x,w_y,w_z,"
@@ -292,8 +270,8 @@ void writeCSV(const std::filesystem::path& filename,
   file.close();
 }
 
-rapidjson::Value ToJson(const Eigen::Ref<const Eigen::VectorXd>& v,
-                             rapidjson::MemoryPoolAllocator<>& alloc) {
+rapidjson::Value ToJson(const Eigen::Ref<const Eigen::VectorXd> &v,
+                        rapidjson::MemoryPoolAllocator<> &alloc) {
   rapidjson::Value res(rapidjson::kArrayType);
   for (int i = 0; i < v.size(); ++i) {
     res.PushBack(v.coeff(i), alloc);
@@ -301,15 +279,15 @@ rapidjson::Value ToJson(const Eigen::Ref<const Eigen::VectorXd>& v,
   return res;
 }
 
-void writeJSON(const std::filesystem::path& filepath,
-               const SetpointVector& setpoints) {
+void writeJSON(const std::filesystem::path &filepath,
+               const SetpointVector &setpoints) {
   rapidjson::Document doc;
 
   doc.SetArray();
-  auto& alloc = doc.GetAllocator();
+  auto &alloc = doc.GetAllocator();
   doc.Reserve(static_cast<rapidjson::SizeType>(setpoints.size()), alloc);
-  for (const auto& setpoint : setpoints) {
-    const double& t = setpoint.state.t;
+  for (const auto &setpoint : setpoints) {
+    const double &t = setpoint.state.t;
     rapidjson::Value item(rapidjson::kObjectType);
     item.AddMember("t", t, alloc)
         .AddMember("p", ToJson(setpoint.state.p, alloc), alloc)
@@ -324,7 +302,7 @@ void writeJSON(const std::filesystem::path& filepath,
   }
 
   struct FCloseWrapper {
-    void operator()(FILE* fp) { std::fclose(fp); }
+    void operator()(FILE *fp) { std::fclose(fp); }
   };
   std::unique_ptr<FILE, FCloseWrapper> fp{std::fopen(filepath.c_str(), "w"),
                                           FCloseWrapper()};
@@ -334,9 +312,9 @@ void writeJSON(const std::filesystem::path& filepath,
   ws.SetMaxDecimalPlaces(5);
   doc.Accept(ws);
 }
-}  // namespace details
+} // namespace details
 
-bool MincoSnapTrajectory::save(const std::string& filename) {
+bool MincoSnapTrajectory::save(const std::string &filename) {
   if (!valid() || setpoints.empty()) {
     return false;
   }
@@ -362,19 +340,18 @@ std::ostream &operator<<(std::ostream &os, const MincoSnapTrajectory &traj) {
   os.precision(4);
   // os << std::scientific;
   os << "MincoSnapTrajectory:\n"
-      << "quad_name =      [" << traj.quad_name << "]\n"
-      << "start_pos =      [" << traj.start_pvaj.col(0).transpose() << "]\n"
-      << "end_pos =        [" << traj.end_pvaj.col(0).transpose() << "]\n"
-      << "start_yaw =      [" << traj.start_yaw << "]\n"
-      << "end_yaw =        [" << traj.end_yaw << "]\n"
-      << "rotation_type =  [" << static_cast<int>(traj.rotation_type) << "]\n"
-      << "heading_type =   [" << static_cast<int>(traj.heading_type) << "]\n"
-      << "P:\n [" << traj.waypoints.transpose() << "]\n"
-      << "T:\n [" << traj.durations.transpose() << "]" << std::endl;
+     << "quad_name =      [" << traj.quad_name << "]\n"
+     << "start_pos =      [" << traj.start_pvaj.col(0).transpose() << "]\n"
+     << "end_pos =        [" << traj.end_pvaj.col(0).transpose() << "]\n"
+     << "start_yaw =      [" << traj.start_yaw << "]\n"
+     << "end_yaw =        [" << traj.end_yaw << "]\n"
+     << "rotation_type =  [" << static_cast<int>(traj.rotation_type) << "]\n"
+     << "heading_type =   [" << static_cast<int>(traj.heading_type) << "]\n"
+     << "P:\n [" << traj.waypoints.transpose() << "]\n"
+     << "T:\n [" << traj.durations.transpose() << "]" << std::endl;
   os.precision();
   // os.unsetf(std::ios::scientific);
   return os;
 }
-
 
 } // namespace drolib

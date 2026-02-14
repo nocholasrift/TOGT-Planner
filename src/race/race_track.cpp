@@ -1,12 +1,11 @@
 #include "drolib/race/race_track.hpp"
+#include <cassert>
 
 namespace drolib {
 
-RaceTrack::RaceTrack(const fs::path& filename) {
-  load(filename);
-}
+RaceTrack::RaceTrack(const fs::path &filename) { load(filename); }
 
-RaceTrack::RaceTrack(const QuadState& init, const QuadState& end) {
+RaceTrack::RaceTrack(const QuadState &init, const QuadState &end) {
   segments.clear();
   gates.clear();
   initState = init;
@@ -83,7 +82,8 @@ bool RaceTrack::getData(const TrajData &prev, TrajData &cur) {
   int segmentIdx{0};
   int pointIdx{0}, timeIdx{0};
   for (size_t i{0}; i < corridors.size(); ++i) {
-    segment = prev.traj.getPieces(segments[segmentIdx].first, segments[segmentIdx].second);
+    segment = prev.traj.getPieces(segments[segmentIdx].first,
+                                  segments[segmentIdx].second);
     segmentIdx++;
     const int midpoints = corridors[i]->size();
     double t{0};
@@ -103,7 +103,8 @@ bool RaceTrack::getData(const TrajData &prev, TrajData &cur) {
         cur.P.col(pointIdx++) = segment.getPos(t);
         // gates[i]->corridor[0].point = segment.getPos(t);
       } else {
-        segment = prev.traj.getPieces(segments[segmentIdx].first, segments[segmentIdx].second);
+        segment = prev.traj.getPieces(segments[segmentIdx].first,
+                                      segments[segmentIdx].second);
         segmentIdx++;
 
         const int totalpoints = gates[i]->size();
@@ -118,7 +119,6 @@ bool RaceTrack::getData(const TrajData &prev, TrajData &cur) {
           t += duration;
         }
       }
-
     }
   }
 
@@ -162,11 +162,11 @@ void RaceTrack::assignWaypoints(TrajData &tdata) {
 //   for (size_t i{0}; i < gates.size(); ++i) {
 //     if (i < gates.size() - 1) {
 //       file << "[" << gates[i]->corridor.front().point.x() << ","
-//                   << gates[i]->corridor.front().point.y() << "," 
+//                   << gates[i]->corridor.front().point.y() << ","
 //                   << gates[i]->corridor.front().point.z() << "],\n ";
 //     } else {
 //       file << "[" << gates[i]->corridor.front().point.x() << ","
-//                   << gates[i]->corridor.front().point.y() << "," 
+//                   << gates[i]->corridor.front().point.y() << ","
 //                   << gates[i]->corridor.front().point.z() << "]";
 //     }
 //   }
@@ -179,7 +179,7 @@ void RaceTrack::assignWaypoints(TrajData &tdata) {
 void RaceTrack::save(const std::string &filename) {
   std::ofstream file;
   file.open(filename.c_str());
-  
+
   initState.write("initState", file);
   endState.write("endState", file);
   file.precision(2);
@@ -199,13 +199,14 @@ void RaceTrack::save(const std::string &filename) {
   file.close();
 }
 
-bool RaceTrack::load(const fs::path& filename) {
+bool RaceTrack::load(const fs::path &filename) {
   name = removeExtension(getBaseName(filename.generic_string()));
   return load(Yaml(filename));
 }
 
 bool RaceTrack::load(const Yaml &yaml) {
-  if (yaml.isNull()) return false;
+  if (yaml.isNull())
+    return false;
 
   segments.clear();
 
@@ -263,11 +264,12 @@ void RaceTrack::initCorridors(const int midpoints) {
     const Eigen::Vector3d &p0 = startPoints[i];
     const Eigen::Vector3d &p1 = endPoints[i];
     // initCorridor(i, p0, p1, midpoints);
-    corridors.push_back(std::make_shared<FreeCorridor>(p0, p1, midpoints, minCorDist));
+    corridors.push_back(
+        std::make_shared<FreeCorridor>(p0, p1, midpoints, minCorDist));
   }
 }
 
-std::ostream& operator<<(std::ostream& os, const RaceTrack& track) {
+std::ostream &operator<<(std::ostream &os, const RaceTrack &track) {
   os.precision(4);
   os << "RaceTrack:\n";
   os << track.initState << "\n";
@@ -277,18 +279,21 @@ std::ostream& operator<<(std::ostream& os, const RaceTrack& track) {
     for (size_t i{0}; i < track.corridors.size(); ++i) {
       os << i << " corridor--------------------\n";
       for (const auto &wp : track.corridors[i]->corridor) {
-        os << "   name: " << wp.shape->name << ", pos: " << wp.point.transpose() << "\n";
+        os << "   name: " << wp.shape->name << ", pos: " << wp.point.transpose()
+           << "\n";
       }
       if (i < track.gates.size()) {
         for (const auto &wp : track.gates[i]->corridor) {
-          os << "   name: " << wp.shape->name << ", pos: " << wp.point.transpose() << "\n";
+          os << "   name: " << wp.shape->name
+             << ", pos: " << wp.point.transpose() << "\n";
         }
       }
     }
   } else if (!track.gates.empty()) {
     for (size_t i{0}; i < track.gates.size(); ++i) {
       for (const auto &wp : track.gates[i]->corridor) {
-        os << "   name: " << wp.shape->name << ", pos: " << wp.point.transpose() << "\n";
+        os << "   name: " << wp.shape->name << ", pos: " << wp.point.transpose()
+           << "\n";
       }
     }
   } else {
@@ -299,6 +304,4 @@ std::ostream& operator<<(std::ostream& os, const RaceTrack& track) {
   return os;
 }
 
-
 } // namespace drolib
-

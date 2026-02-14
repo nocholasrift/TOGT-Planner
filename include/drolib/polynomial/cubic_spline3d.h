@@ -8,16 +8,16 @@ namespace drolib {
 namespace spline {
 
 class CubicSpline3D {
- public:
+public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   CubicSpline3D() {}
   ~CubicSpline3D() {}
 
   bool isInPath(const double s);
 
-  void plan(const std::vector<Eigen::Vector3d>& points,
-            const std::vector<double>& s_vec);
-            
+  void plan(const std::vector<Eigen::Vector3d> &points,
+            const std::vector<double> &s_vec);
+
   // PolynomialTrajectory coeffs(const double s);
 
   inline Eigen::Vector3d position(const double s) const {
@@ -36,7 +36,14 @@ class CubicSpline3D {
 
   inline bool isValid() const { return valid_; }
 
- private:
+  inline std::optional<Eigen::Vector2d> get_domain() {
+    if (!valid_)
+      return std::nullopt;
+
+    return Eigen::Vector2d(s_vec_.front(), s_vec_.back());
+  }
+
+private:
   std::vector<double> s_vec_;
   CubicSpline x_;
   CubicSpline y_;
@@ -44,6 +51,6 @@ class CubicSpline3D {
   bool valid_;
 };
 
-}
+} // namespace spline
 
-}  // namespace drolib
+} // namespace drolib

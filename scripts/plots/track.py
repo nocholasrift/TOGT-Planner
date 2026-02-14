@@ -1,3 +1,4 @@
+import plotly.graph_objects as go
 import numpy as np
 import yaml
 
@@ -111,3 +112,46 @@ def plot_track(ax, track_file):
 
         else:
             raise ValueError('Unrecognized gate: ' + g['type'])
+
+
+
+
+def pyplot_track(fig, track_file):
+    with open(track_file) as fp:
+        track = yaml.safe_load(fp)
+
+    for g_name in track['orders']:
+        g = track[g_name]
+        pos = np.array(g['position'])
+        R = rpy_to_rotation_matrix(g['rpy'])
+        drift = 0.0
+        verts = []
+
+        # Re-use your logic for vertex generation
+        if g['type'] == 'TrianglePrisma':
+            hw, hh = 0.5*(g['width']-g['margin']), 0.5*(g['height']-g['margin'])
+            verts = [[-hh, hw, drift], [hh, 0.0, drift], [-hh, -hw, drift], [-hh, hw, drift]]
+        
+        elif g['type'] == 'RectanglePrisma':
+            hw, hh = 0.5*(g['width']-g['marginW']), 0.5*(g['height']-g['marginH'])
+            verts = [[-hh, hw, drift], [-hh, -hw, drift], [hh, -hw, drift], [hh, hw, drift], [-hh, hw, drift]]
+        
+        elif g['type'] == 'HexagonPrisma':
+            aside = g['side'] - g['margin']
+            hside = 0.5 * aside
+            height = hside * np.tan(np.pi/3.0)
+            verts = [[-height, hside, drift], [0.0, aside, drift], [height, hside, drift], 
+                     [height, -hside, drift], [0.0, -aside, drift], [-height, -hside, drift], [-height, hside, drift]]
+
+        if len(verts) > 0:
+            # Transform vertices to 3D space
+            # Note: We keep all 3 columns (x, y, z) for Scatter3d
+            verts_3d = np.array(verts) @ R.T + pos
+            
+            fig.add_trace(go.Scatter3d(
+                x=verts_3d[:,0], y=verts_3d[:,1], z=verts_3d[:,2],
+                mode='lines',
+                line=dict(color='black', width=5),
+                name=f"Gate: {g_name}",
+                showlegend=False
+            ))
