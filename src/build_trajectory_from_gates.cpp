@@ -9,11 +9,13 @@ int main() {
   const std::string quad_name = "crazyflie";
   const std::string config_name = quad_name + "_setups.yaml";
   // const std::string track_name = "race_uzh_7g_multiprisma.yaml";
-  const std::string track_name = "straight_line.yaml";
+  const std::string env = "12gates";
+  const std::string track_name = env + ".yaml";
+  const std::string arclen_traj_name = env + ".txt";
   // const std::string track_name = "race_uzh_19wp.yaml";
 
   const std::string traj_name = "crazyflie_traj.csv";
-  const std::string arclen_traj_name = "crazyflie_arclen_traj.csv";
+  /*const std::string arclen_traj_name = "crazyflie_arclen_traj.csv";*/
   const std::string wpt_name = "crazyflie_wpt.yaml";
 
   std::shared_ptr<RaceTrack> racetrack;
@@ -42,8 +44,8 @@ int main() {
   std::cout << extremum << std::endl;
 
   MincoSnapTrajectory traj = raceplanner->getTrajectory();
-  traj.save(traj_path);
-  traj.saveSegments(wpt_path, 1);
+  /*traj.save(traj_path);*/
+  /*traj.saveSegments(wpt_path, 1);*/
 
   ArclenTrajConverter::Settings converter_settings;
   converter_settings.num_samples = 100;

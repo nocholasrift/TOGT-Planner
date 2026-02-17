@@ -78,7 +78,8 @@ public:
     std::ofstream file;
     file.open(fname.c_str());
     file.precision(6);
-    file << "arc_length_s\tgamma_x(s)\tgamma_y(s)\tgamma_z(s)\n";
+    file << "arc_length_s\tgamma_x(s)\tgamma_y(s)\tgamma_z(s)\tv_x(s)\tv_y(s)"
+            "\tv_z(s)\n";
 
     std::optional<Eigen::Vector2d> spline_domain_opt = spline_.get_domain();
     if (!spline_domain_opt) {
@@ -90,8 +91,9 @@ public:
     for (size_t step = 0; step < num_samples; ++step) {
       double s = spline_domain(0) + step * step_sz;
       Eigen::Vector3d pos = spline_.position(s);
+      Eigen::Vector3d tan = spline_.tangent(s);
       file << s << "\t\t" << pos(0) << "\t\t" << pos(1) << "\t\t" << pos(2)
-           << "\n";
+           << "\t\t" << tan(0) << "\t\t" << tan(1) << "\t\t" << tan(2) << "\n";
     }
 
     file.precision();

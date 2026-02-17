@@ -1,0 +1,84 @@
+initState:
+  pos: [-5.0, 0.0, 1.0] # Starting at the "Home" gate
+  vel: [0.0, 0.0, 0.0]
+  acc: [0.0, 0.0, 0.0]
+  jer: [0.0, 0.0, 0.0]
+  rot: [1.0, 0.0, 0.0, 0.0]
+  cthrustmass: 9.8066
+  euler: [0.0, 0.0, 0.0]
+
+endState:
+  pos: [-5.0, 0.0, 1.0] # Back to home
+  vel: [2.0, 0.0, 0.0]  # Non-zero velocity for a smooth loop-through
+  acc: [0.0, 0.0, 0.0]
+  jer: [0.0, 0.0, 0.0]
+  cthrustmass: 9.8066
+  euler: [0.0, 0.0, 0.0]
+  rot: [1.0, 0.0, 0.0, 0.0]
+
+orders: ['Gate1', 'Gate2', 'Gate3', 'Gate4', 'Gate5']
+
+# GATE 1: The High Arch (Entering the climb)
+Gate1:
+  type: 'RectanglePrisma'
+  name: 'climb_gate'
+  position: [0.0, 5.0, 4.0]
+  rpy: [0.0, -90, 45.0] # Tilted to face the incoming diagonal climb
+  width: 2.5
+  height: 2.5
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 2: The Apex (The "Top of the coaster")
+Gate2:
+  type: 'PentagonPrisma'
+  name: 'apex_gate'
+  position: [8.0, 0.0, 6.0]
+  rpy: [0.0, -90.0, 90.0] # Facing down-track
+  radius: 2.2
+  margin: 0.0
+  length: 0.0
+  midpoints: 1
+  stationary: true
+
+# GATE 3: The Power Dive (Heading toward the floor)
+Gate3:
+  type: 'TrianglePrisma'
+  name: 'dive_gate'
+  position: [0.0, -5.0, 3.5]
+  rpy: [0.0, -90.0, 135.0]
+  width: 2.4
+  height: 2.4
+  margin: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 4: The Low Slalom (A low-altitude turn)
+Gate4:
+  type: 'RectanglePrisma'
+  name: 'slalom_gate'
+  position: [-4.0, -4.0, 1.0]
+  rpy: [0.0, -90.0, 180.0]
+  width: 2.0
+  height: 2.0
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 5: The Home Stretch (Lining up for the reset)
+Gate5:
+  type: 'HexagonPrisma'
+  name: 'home_gate'
+  position: [-8.0, 0.0, 1.2]
+  rpy: [0.0, -90.0, -90.0]
+  side: 1.2
+  margin: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true

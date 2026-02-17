@@ -1,0 +1,87 @@
+initState:
+  pos: [-5.0, 0.0, 1.0]
+  vel: [0.0, 0.0, 0.0]
+  acc: [0.0, 0.0, 0.0]
+  jer: [0.0, 0.0, 0.0]
+  rot: [1.0, 0.0, 0.0, 0.0]
+  cthrustmass: 9.8066
+  euler: [0.0, 0.0, 0.0]
+
+endState:
+  pos: [-5.0, 0.0, 1.0]
+  vel: [2.0, 0.0, 0.0]   # Smooth fly-through restart
+  acc: [0.0, 0.0, 0.0]
+  jer: [0.0, 0.0, 0.0]
+  cthrustmass: 9.8066
+  euler: [0.0, 0.0, 0.0]
+  rot: [1.0, 0.0, 0.0, 0.0]
+
+orders: ['Gate1', 'Gate2', 'Gate3', 'Gate4', 'Gate5', 'Gate6', 'Gate7', 'Gate8']
+
+# Helical layout:
+# Center approx at [0, 0, 3.5]
+# Radius ~5 m
+# Total vertical excursion: 1 m -> 6 m -> 1 m
+
+# GATE 1 — Enter climb (front-right quadrant)
+Gate1:
+  type: 'RectanglePrisma'
+  name: 'helix_entry'
+  position: [3.5, 3.5, 2.5]
+  rpy: [0.0, -90.0, 45.0]
+  width: 2.2
+  height: 2.2
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 2 — Right side mid-climb
+Gate2:
+  type: 'RectanglePrisma'
+  name: 'helix_right_high'
+  position: [5.0, 0.0, 4.0]
+  rpy: [0.0, -90.0, 90.0]
+  width: 2.2
+  height: 2.2
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 3 — Back-right near apex
+Gate3:
+  type: 'RectanglePrisma'
+  name: 'helix_apex_entry'
+  position: [3.5, -3.5, 5.5]
+  rpy: [0.0, -90.0, 135.0]
+  width: 2.0
+  height: 2.0
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 4 — Apex (highest point)
+Gate4:
+  type: 'RectanglePrisma'
+  name: 'helix_apex'
+  position: [0.0, -5.0, 6.0]
+  rpy: [0.0, -90.0, 180.0]
+  width: 2.0
+  height: 2.0
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 1
+  stationary: true
+
+# GATE 5 — Back-left descending
+Gate5:
+  type: 'RectanglePrisma'
+  name: 'helix_left_high'
+  posi
+
