@@ -13,8 +13,8 @@ sys.path += [BASEPATH]
 sys.path += [ROOTPATH]
 
 track_file = ROOTPATH + "/resources/racetrack/straight_line.yaml"
-# traj_file = ROOTPATH + "/resources/trajectory/crazyflie_traj.csv"
-traj_file = ROOTPATH + "/resources/trajectory/crazyflie_refined_traj.csv"
+traj_file = ROOTPATH + "/resources/trajectory/crazyflie_traj.csv"
+# traj_file = ROOTPATH + "/resources/trajectory/crazyflie_refined_traj.csv"
 arclen_traj_file = ROOTPATH + "/resources/trajectory/crazyflie_arclen_traj.csv"
 
 # 1. Load Optimized Trajectory (CSV)

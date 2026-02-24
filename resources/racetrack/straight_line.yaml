@@ -8,7 +8,7 @@ initState:
   euler: [0.0, 0.0, 0.0]
 
 endState:
-  pos: [10.0,0.0, 2.4]
+  pos: [0.0,10.0, 1.2]
   vel: [0.0, 0.0, 0.0]
   acc: [0.0, 0.0, 0.0]
   jer: [0.0, 0.0, 0.0]
@@ -16,28 +16,28 @@ endState:
   euler: [0.0, 0.0, 0.0]
   rot: [1.0, 0.0, 0.0, 0.0]
 
-orders: ['Gate1', 'Gate2']
-
-Gate1:
-  type: 'RectanglePrisma'
-  position: [3.3,-3.0,0.6]
-  rpy: [0.0, -90, -30.0]
-  width: 0.5
-  height: 0.5
-  marginW: 0.2
-  marginH: 0.2
-  length: 0.0
-  midpoints: 0
-  stationary: true
-
-Gate2:
-  type: 'RectanglePrisma'
-  position: [6.6,3.0,8.0]
-  rpy: [0.0, -90, 0.0]
-  width: 0.5
-  height: 0.5 
-  marginW: 0.2
-  marginH: 0.1
-  length: 0.0
-  midpoints: 0
-  stationary: true
+# orders: ['Gate1', 'Gate2']
+#
+# Gate1:
+#   type: 'RectanglePrisma'
+#   position: [3.3,-3.0,0.6]
+#   rpy: [0.0, -90, -30.0]
+#   width: 0.5
+#   height: 0.5
+#   marginW: 0.2
+#   marginH: 0.2
+#   length: 0.0
+#   midpoints: 0
+#   stationary: true
+#
+# Gate2:
+#   type: 'RectanglePrisma'
+#   position: [6.6,3.0,8.0]
+#   rpy: [0.0, -90, 0.0]
+#   width: 0.5
+#   height: 0.5 
+#   marginW: 0.2
+#   marginH: 0.1
+#   length: 0.0
+#   midpoints: 0
+#   stationary: true
