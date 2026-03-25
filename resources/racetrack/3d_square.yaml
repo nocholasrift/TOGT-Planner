@@ -1,0 +1,119 @@
+initState:
+  pos: [6.00, 0.00, 1.20]
+  vel: [-0.00, 2.00, 0.00]
+  acc: [-0.00, 0.00, 0.00]
+  jer: [-0.00, -0.00, 0.00]
+  rot: [0.7071, 0.0000, 0.0000, 0.7071]
+  cthrustmass: 9.8066
+  euler: [0.0, 0.0, 90.00]
+
+endState:
+  pos: [6.00, 0.00, 1.20]
+  vel: [-0.00, 2.00, 0.00]
+  acc: [-0.00, 0.00, 0.00]
+  jer: [-0.00, -0.00, 0.00]
+  rot: [0.7071, 0.0000, 0.0000, 0.7071]
+  cthrustmass: 9.8066
+  euler: [0.0, 0.0, 90.00]
+
+orders: ['Gate2', 'Gate3', 'Gate4', 'Gate5', 'Gate6', 'Gate7', 'Gate8', 'Gate9', 'Gate10', 'Gate11', 'Gate12']
+
+Gate2:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [5.58, 4.24, 1.20]
+  rpy: [0.0, -90.0, 113.69]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate3:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [4.24, 5.58, 1.20]
+  rpy: [0.0, -90.0, 156.32]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate4:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [0.00, 6.00, 1.20]
+  rpy: [0.0, -90.0, -180.00]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate5:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [-4.24, 5.58, 1.20]
+  rpy: [0.0, -90.0, -156.31]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate6:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [-5.58, 4.24, 6.20]
+  rpy: [0.0, -90.0, -113.68]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate7:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [-6.00, 0.00, 6.20]
+  rpy: [0.0, -90.0, -90.00]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate8:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [-5.58, -4.24, 6.20]
+  rpy: [0.0, -90.0, -66.31]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate9:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [-4.24, -5.58, 6.20]
+  rpy: [0.0, -90.0, -23.68]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate10:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [-0.00, -6.00, 6.20]
+  rpy: [0.0, -90.0, 0.00]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate11:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [4.24, -5.58, 1.20]
+  rpy: [0.0, -90.0, 23.69]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
+Gate12:
+  type: 'RectanglePrisma'
+  name: 'vicon_gate'
+  position: [5.58, -4.24, 1.20]
+  rpy: [0.0, -90.0, 66.32]
+  width: 2.4
+  height: 2.4
+  stationary: true
+
