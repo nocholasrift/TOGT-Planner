@@ -1,5 +1,5 @@
 initState:
-  pos: [-5.0, 0.0, 1.0] # Starting at the "Home" gate
+  pos: [0.00, 0.00, 4.50]
   vel: [0.0, 0.0, 0.0]
   acc: [0.0, 0.0, 0.0]
   jer: [0.0, 0.0, 0.0]
@@ -8,76 +8,103 @@ initState:
   euler: [0.0, 0.0, 0.0]
 
 endState:
-  pos: [-5.0, 0.0, 1.0] # Back to home
-  vel: [2.0, 0.0, 0.0]  # Non-zero velocity for a smooth loop-through
+  pos: [0.00, 0.00, 4.50]
+  vel: [1.37, 1.37, 0.48]
   acc: [0.0, 0.0, 0.0]
   jer: [0.0, 0.0, 0.0]
   cthrustmass: 9.8066
-  euler: [0.0, 0.0, 0.0]
-  rot: [1.0, 0.0, 0.0, 0.0]
+  euler: [0.0, 0.0, 45.00]
+  rot: [0.9239, 0.0000, 0.0000, 0.3827]
 
-orders: ['Gate1', 'Gate2', 'Gate3', 'Gate4', 'Gate5']
+orders: ['Gate1', 'Gate2', 'Gate3', 'Gate4', 'Gate5', 'Gate6', 'Gate7']
 
-# GATE 1: The High Arch (Entering the climb)
+# GATE 1: climb_gate
 Gate1:
   type: 'RectanglePrisma'
   name: 'climb_gate'
-  position: [0.0, 5.0, 4.0]
-  rpy: [0.0, -90, 45.0] # Tilted to face the incoming diagonal climb
-  width: 2.5
-  height: 2.5
+  position: [7.07, 5.00, 6.97]
+  rpy: [0.0, -90.0, 0.00]
+  width: 2.4
+  height: 2.4
   marginW: 0.0
   marginH: 0.0
   length: 0.0
   midpoints: 0
   stationary: true
 
-# GATE 2: The Apex (The "Top of the coaster")
+# GATE 2: upper_loop
 Gate2:
   type: 'PentagonPrisma'
-  name: 'apex_gate'
-  position: [8.0, 0.0, 6.0]
-  rpy: [0.0, -90.0, 90.0] # Facing down-track
+  name: 'upper_loop'
+  position: [10.00, 0.00, 8.00]
+  rpy: [0.0, -90.0, -90.00]
   radius: 2.2
   margin: 0.0
   length: 0.0
-  midpoints: 1
-  stationary: true
-
-# GATE 3: The Power Dive (Heading toward the floor)
-Gate3:
-  type: 'TrianglePrisma'
-  name: 'dive_gate'
-  position: [0.0, -5.0, 3.5]
-  rpy: [0.0, -90.0, 135.0]
-  width: 2.4
-  height: 2.4
-  margin: 0.0
-  length: 0.0
   midpoints: 0
   stationary: true
 
-# GATE 4: The Low Slalom (A low-altitude turn)
-Gate4:
-  type: 'RectanglePrisma'
-  name: 'slalom_gate'
-  position: [-4.0, -4.0, 1.0]
-  rpy: [0.0, -90.0, 180.0]
-  width: 2.0
-  height: 2.0
+# GATE 3: apex_gate
+Gate3:
+  type: 'TrianglePrisma'
+  name: 'apex_gate'
+  position: [7.07, -5.00, 6.97]
+  rpy: [0.0, -90.0, -180.00]
+  width: 2.4
+  height: 2.4
   marginW: 0.0
   marginH: 0.0
   length: 0.0
   midpoints: 0
   stationary: true
 
-# GATE 5: The Home Stretch (Lining up for the reset)
+# GATE 4: descent_gate
+Gate4:
+  type: 'RectanglePrisma'
+  name: 'descent_gate'
+  position: [0.00, -0.00, 4.50]
+  rpy: [0.0, -90.0, 135.00]
+  width: 2.4
+  height: 2.4
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 5: lower_cross
 Gate5:
   type: 'HexagonPrisma'
-  name: 'home_gate'
-  position: [-8.0, 0.0, 1.2]
-  rpy: [0.0, -90.0, -90.0]
+  name: 'lower_cross'
+  position: [-7.07, 5.00, 2.03]
+  rpy: [0.0, -90.0, -180.00]
   side: 1.2
+  margin: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 6: dive_gate
+Gate6:
+  type: 'RectanglePrisma'
+  name: 'dive_gate'
+  position: [-10.00, 0.00, 1.00]
+  rpy: [0.0, -90.0, -90.00]
+  width: 2.4
+  height: 2.4
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.0
+  midpoints: 0
+  stationary: true
+
+# GATE 7: lower_loop
+Gate7:
+  type: 'PentagonPrisma'
+  name: 'lower_loop'
+  position: [-7.07, -5.00, 2.03]
+  rpy: [0.0, -90.0, 0.00]
+  radius: 2.2
   margin: 0.0
   length: 0.0
   midpoints: 0
