@@ -9,7 +9,7 @@ int main() {
   const std::string quad_name = "crazyflie";
   const std::string config_name = quad_name + "_setups.yaml";
   // const std::string track_name = "race_uzh_7g_multiprisma.yaml";
-  const std::string env = "3d_square_loop";
+  const std::string env = "3d_loop";
   const std::string track_name = env + ".yaml";
   const std::string arclen_traj_name = env + ".txt";
   // const std::string track_name = "race_uzh_19wp.yaml";
